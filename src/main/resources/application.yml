@@ -1,0 +1,9 @@
+spring:
+    application:
+        name: todo
+server:
+    port: 8080
+
+app:
+    version: @version@
+    description: @description@
