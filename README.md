@@ -3,28 +3,53 @@
 
 Proyecto de administración de tareas enfocado al aprendizaje del framework Spring MVC.
 
+[TOC]
 
-## Deployment
+## Pre-requisitos
+Para poder utilizar el repositorio actual, se deberá de cumplir con los siguientes requerimientos:
+
+- [Open JDK 21](https://openjdk.org/projects/jdk/21/) o mayor
+- [Docker](https://www.docker.com/get-started/)
+- [Git](https://git-scm.com/downloads)
+- [VSCode](https://code.visualstudio.com/download)
+- [Mongo DB Compass](https://www.mongodb.com/products/tools/compass)
+- Algún cliente Rest como: [Insomnia](https://insomnia.rest/), [Postman](https://www.postman.com/) o [CURL](https://curl.se/)
+
+
+## Instalación y configuración del proyecto
 
 Para implementar este proyecto ejecuta los siguientes pasos
 
-### 1. Activar la base de datos mongodb
+### Clonar el repositorio en Github
+
+Las siguientes operaciones se deberán de llevar a cabo a través de la línea de comandos:
+
 
 ```shell
-  docker compose src/main/docker/mongodb.yml up -d
+## Clonar el repositorio
+git clone git@github.com:calmecac-community/todo.git
+
+## Cambiarse al repositorio descargado
+cd todo
 ```
 
-### 2. Levantar el servidor
+### Activar la base de datos mongodb
+
+```shell
+docker compose src/main/docker/mongodb.yml up -d
+```
+
+### Levantar el proyecto con spring boot
 
 ```shell
 ## Para linux o macos
-  ./mvnw spring-boot:run
+./mvnw spring-boot:run
 
 ## Para windows
-  ./mvnw.cmd spring-boot:run
+./mvnw.cmd spring-boot:run
 ```
 
-### 3. Validar
+### Validar
 
 Abre un navegador web y coloca la siguiente ruta:
 
@@ -32,7 +57,7 @@ Abre un navegador web y coloca la siguiente ruta:
 http://localhost:8080/api/info
 ```
 
-El servicio deberá de regresar un objeto con información parecida a la siguiente:
+En la página web, se debeŕa de ver un resutlado parecido al siguiente:
 
 ```json
 {
@@ -42,6 +67,62 @@ El servicio deberá de regresar un objeto con información parecida a la siguien
   "port": "8080"
 }
 ```
+
+## Estructura del proyecto
+
+```shell
+──src
+  ├── main
+  │   ├── docker
+  │   ├── java
+  │   │   └── mx
+  │   │       └── calmecac
+  │   │           └── todo
+  │   │               ├── controllers
+  │   │               ├── dtos
+  │   │               ├── mappers
+  │   │               ├── model
+  │   │               ├── repositories
+  │   │               └── services
+  │   └── resources
+  │       ├── static
+  │       └── templates
+  └── test
+      └── java
+          └── mx
+              └── calmecac
+                  └── todo
+```
+
+
+|  Directorio | Descripción  |
+|---|---|
+|`src/main/java/mx/calmecac/todo/controllers`| Controladores que atienden las peticiones HTTP de un request. Los archivos tienen el sifujo `Controler.java` |
+|`src/main/java/mx/calmecac/todo/services`| Definición de las clases que implementan la lógica de negocio. Los archivos tienen el sufijo  `Service.java` |
+|`src/main/java/mx/calmecac/todo/model`| Definición de las entidades que representan el modelo de dominio del proyecto|
+|`src/main/java/mx/calmecac/todo/repositories`| Clases que acceden a la base de datos. Los archivos tienen el sufijo `Repository.java` |
+|`src/main/java/mx/calmecac/todo/dtos`| Los archivos tienen el sufijo  `Dto.java` |
+|`src/main/resources/static`| Se guardan los archivos utilizados en las vistas html del proyecto. Los archivos tienen extensiiones .png, .jpg, .svg, etc |
+|`src/main/resources/templates`| Se guardan las plantillas de las vistas Thymeleaf. Aquí van los archivos con extensión `.html`
+|`src/main/test`| Se guardan las clases que continenen las pruebas unitarias del proyecto
+
+
+## Patron IoC
+## Principales anotaciones
+### La anotación @Controller
+### La anotación @RequestMapping
+### La anotación @RequestParam
+### La anotación @ModelAttribute
+### La anotación @PathVariable
+### La anotación @Value
+### La anotación @Autowired
+### La anotación @Qualifier
+### La anotación @Primary
+### La anotación @Configuration`
+### La anotaciones @Repository, @Service, @Controller
+### La anotaciones @Scanneo de componentes
+### La anotaciones Recursos estáticos
+
 
 [![License: MIT](https://cdn.prod.website-files.com/5e0f1144930a8bc8aace526c/65dd9eb5aaca434fac4f1c34_License-MIT-blue.svg)](/LICENSE)
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
