@@ -150,6 +150,20 @@ En la página web, se debeŕa de ver un resutlado parecido al siguiente:
 ### La anotaciones @Repository, @Service, @Controller
 ### La anotaciones @Scanneo de componentes
 ### La anotaciones Recursos estáticos
+### La anotaciones RestControllerAdvicer
+
+```java
+@RestControllerAdvice
+public class ExceptionErrorHandler {
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> generalError(Exception ex) {
+        return ResponseEntity.internalServerError().body("Error general capturado");
+    }
+
+}
+
+```
 
 
 [![License: MIT](https://cdn.prod.website-files.com/5e0f1144930a8bc8aace526c/65dd9eb5aaca434fac4f1c34_License-MIT-blue.svg)](/LICENSE)
