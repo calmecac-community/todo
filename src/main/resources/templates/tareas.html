@@ -8,5 +8,11 @@
 <body>
     <h1 th:text="${titulo}">Titulo por default</h1>
     <h2 th:text="${subtitulo}">Subtilulo por default</h2>
+
+    <h3>Información del usuario</h3>
+    <div th:text="${usuario.username}"></div>
+    <div th:text="${usuario.primerApellido}"></div>
+    <div th:text="${usuario.segundoApellido}"></div>
+
 </body>
 </html>
