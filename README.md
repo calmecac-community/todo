@@ -135,9 +135,32 @@ En la página web, se debeŕa de ver un resutlado parecido al siguiente:
 |`src/main/test`| Se guardan las clases que continenen las pruebas unitarias del proyecto
 
 
-## Patron IoC
+## MVC ( Modelo Vista Controlador)
+
+MVC (Modelo-Vista-Controlador) es un patrón en el diseño de software comúnmente utilizado para implementar interfaces de usuario, datos y lógica de control. Enfatiza una separación entre la lógica de negocios y su visualización. Esta "separación de preocupaciones" proporciona una mejor división del trabajo y una mejora de mantenimiento. Algunos otros patrones de diseño se basan en MVC, como MVVM (Modelo-Vista-modelo de vista), MVP (Modelo-Vista-Presentador) y MVW (Modelo-Vista-Whatever).
+
 ## Principales anotaciones
 ### La anotación @Controller
+
+La anotación `@Controller` le indica al Framework de Spring que la Clase decorada es un controlador.
+
+ 
+```java
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Controller
+public class TareaController {
+
+    @RequestMapping("/tareas")
+    public String showTareas(Model model) {
+        model.addAttribute("titulo", "Gestor de tareas desde variable");
+        model.addAttribute("subtitulo", "Lista de tareas desde variable");       
+        return "tareas";
+    }
+
+}
+```
 ### La anotación @RequestMapping
 ### La anotación @RequestParam
 ### La anotación @ModelAttribute
