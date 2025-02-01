@@ -64,7 +64,7 @@ cd todo
 ### Activar la base de datos mongodb
 
 ```shell
-docker compose src/main/docker/mongodb.yml up -d
+docker compose -f src/main/docker/mongodb.yml up -d
 ```
 
 ### Levantar el proyecto con spring boot
