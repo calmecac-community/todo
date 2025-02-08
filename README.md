@@ -21,9 +21,9 @@ Proyecto de administración de tareas enfocado al aprendizaje del framework Spri
     * [Principales anotaciones](#principales-anotaciones)
         * [La anotación @Controller](#la-anotación-@controller)
         * [La anotación @RequestMapping](#la-anotación-@requestmapping)
-        * [La anotación @RequestParam](#la-anotación-@requestparam)
         * [La anotación @ModelAttribute](#la-anotación-@modelattribute)
         * [La anotación @PathVariable](#la-anotación-@pathvariable)
+        * [La anotación @RequestParam](#la-anotación-@requestparam)
         * [La anotación @Value](#la-anotación-@value)
         * [La anotación @Autowired](#la-anotación-@autowired)
         * [La anotación @Qualifier](#la-anotación-@qualifier)
@@ -287,7 +287,7 @@ public void deleteTarea(){
     return;
 }
 ```
-### La anotación @RequestParam
+
 ### La anotación @ModelAttribute
 
 ```java
@@ -335,6 +335,20 @@ public class TareaRestController {
 }
 ```
 
+### La anotación @RequestParam
+
+Otra manera de enviar parámetros a un servicio es a través de los _query params_.
+
+Ejemplo:
+
+```java
+@GetMapping("/tareas/filtro")
+public Tarea getTareasFiltro(@RequestParam id) {
+    //Consultar tarea
+    return tarea;
+}
+
+```
 
 ### La anotación @Value
 
