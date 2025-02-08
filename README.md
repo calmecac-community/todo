@@ -544,6 +544,8 @@ public class TodoApplication {
 
 ### La anotaciones RestControllerAdvicer
 
+Para poder interceptar Excepciones lanzadas en el aplicativo y poder manejarlas de manera centralizada se puede utilizar las anotaciones `@RestControllerAdive` y `@ExceptionHandler`. 
+
 ```java
 @RestControllerAdvice
 public class ExceptionErrorHandler {
@@ -556,7 +558,114 @@ public class ExceptionErrorHandler {
 }
 
 ```
+### Definición de filtros e interceptores
 
+Los filtros e interceptores nos permiten capturar la peticiones que se le hacen al servicio web antes de que lleguen a él, de tal manera que podamos manipular las peticiones y realizar operaciones antes de que sea procesada una solicitud, permitiendo un control completo sobre el aplicativo.
+
+Primero se aplican los filtros y depués los interceptores.
+
+
+![alt text](img/filtros-e-interceptores.png)
+
+#### Definición de filtros
+
+Para definir un filtro se debe implementar la interfaz `Filter` y anotar la clase con `@Component` como se muestra a continuación:
+
+```java
+import java.io.IOException;
+
+import org.springframework.stereotype.Component;
+
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import lombok.extern.log4j.Log4j2;
+
+@Component
+@Log4j2
+public class LogFilter implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        log.info("IP ADDR: " + request.getLocalAddr());
+        chain.doFilter(request, response);
+    }
+
+}
+
+```
+
+#### Definición de Interceptores
+
+Para definir un interceptor se tienen que realizar dos pasos:
+
+1. Definir el interceptor
+2. Configurar el interceptor dentro de Spring MVC
+
+
+Primero, vamos a definir el interceptor como se muestra a continuación:
+
+
+```java
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
+@Component
+public class LogInterceptor implements HandlerInterceptor {
+
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) 
+      throws Exception {
+        log.info("preHandle");
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) 
+      throws Exception {
+        log.info("postHandle");
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) 
+      throws Exception {
+        log.info("afterCompletion");
+    }
+
+}
+
+```
+
+En seguida, vamos a configurar el interceptor para que Spring MVC lo pueda incluir en su ciclo de ejecución. Para realizar esta tarea, vamos a crear una clase de configuración llamada `WebConfigurer.java`
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class WebConfigurer implements WebMvcConfigurer {
+
+    @Autowired
+    private LogInterceptor logInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(logInterceptor).addPathPatterns("/api/**");
+    }
+}
+```
 
 [![License: MIT](https://cdn.prod.website-files.com/5e0f1144930a8bc8aace526c/65dd9eb5aaca434fac4f1c34_License-MIT-blue.svg)](/LICENSE)
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
