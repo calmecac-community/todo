@@ -1,6 +1,7 @@
 package mx.calmecac.todo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -28,15 +29,26 @@ public class TareaDbService implements TareaService {
     }
 
     @Override
+    public Tarea actualizarTarea(String id, Tarea tarea) {
+        tarea.setId(id);
+        return repository.save(tarea);
+    }
+
+    @Override
     public Tarea consultaTarea(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'consultaTarea'");
+        Optional<Tarea> tareaOptional = repository.findById(id);
+
+        if(tareaOptional.isPresent()){
+            return tareaOptional.get();
+        }else {
+            return Tarea.builder().nombre("POKEMON NO IDENTICADO").build();
+        }
     }
 
     @Override
     public int eliminaTarea(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eliminaTarea'");
+        repository.deleteById(id);
+        return 1;
     }
 
 }

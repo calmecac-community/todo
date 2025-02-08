@@ -37,4 +37,10 @@ public class TareaDummyService implements TareaService{
     public int eliminaTarea(String id) {
         return 0;
     }
+
+    @Override
+    public Tarea actualizarTarea(String id, Tarea tarea) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'actualizarTarea'");
+    }
 }

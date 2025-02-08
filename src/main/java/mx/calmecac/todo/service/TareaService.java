@@ -14,4 +14,6 @@ public interface TareaService {
     public Tarea consultaTarea(String id);
 
     public int eliminaTarea(String id);
+
+    public Tarea actualizarTarea(String id, Tarea tarea);
 }
