@@ -26,10 +26,16 @@ public class TareaRestController {
     @Autowired
     private TareaService service;
 
+    @Autowired
+    private Tarea defaultTarea;
+
     // -> /api/tareas?nombre=oxis&descripcion=ldlf
     @RequestMapping("/tareas")
     public List<Tarea> getTareas(TareaFiltro filtro) {
-        return service.consultaTareas(filtro);
+
+        List<Tarea> tareas = service.consultaTareas(filtro);
+        tareas.add(defaultTarea);
+        return tareas;
     }
 
     @RequestMapping("/tareas/filtro")
