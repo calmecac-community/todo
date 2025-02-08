@@ -162,17 +162,372 @@ public class TareaController {
 }
 ```
 ### La anotación @RequestMapping
+
+Se puede utilizar la anotación `@RequestMapping` para asignar solicitudes a métodos de un controlador. Se puede utilizar a nivel de clase para expresar asignaciones compartidas o a nivel de método para limitarse a una asignación específica.
+
+
+Existen atajos específicos de `@RequestMapping` para los métodos más comúnes del protocolo HTTP:
+
+![alt text](img/request-mapping.png)
+
+Estos atajos son anotaciones que heredan las características de la anotación `@RequestMapping` con la finalidad de escribir código más simple de leer.
+
+En la siguiente ilustración se muestran los principales métodos HTTP y su respectivo atajo o alias:
+
+![alt text](img/http-methods.png)
+
+A continuación se muestran algunos ejemplos en código java.
+
+#### @GetMapping
+
+Generalmente, la anotación `@GetMapping` se utiliza para manejar peticiones HTTP que tienen como objetivo consultar uno o máS recurso; es decir, peticiones de sólo lectura;
+
+
+```java
+@RequestMapping(value="/tareas", method=RequestMethod.GET)
+public List<Tarea> getTareas(){
+    // implementación del método
+    return tareas;
+}
+```
+
+Su atajo es:
+
+```java
+@GetMapping("/tareas")
+public List<Tarea> getTareas(){
+    // implementación del método
+    return tareas;
+}
+```
+
+#### @PostMapping
+
+Generalmente, la anotación `@PostMapping` se utiliza para manejar peticiones HTTP que tienen como objetivo crear uno o más recurso; es decir, peticiones de escritura;
+
+```java
+@RequestMapping(value="/tareas", method=RequestMethod.POST)
+public Tarea createTareas(){
+    // implementación del método
+    return tarea;
+}
+```
+
+Su atajo es:
+
+```java
+@PostMapping("/tareas")
+public Tarea createTareas(){
+    // implementación del método
+    return tarea;
+}
+```
+
+#### @PutMapping
+
+Generalmente, la anotación `@PutMapping` se utiliza para manejar peticiones HTTP que tienen como objetivo actualizar uno o más recurso
+```java
+@RequestMapping(value="/tareas", method=RequestMethod.PUT)
+public Tarea createTareas(){
+    // implementación del método
+    return tarea;
+}
+```
+
+Su atajo es:
+
+```java
+@PutMapping("/tareas}")
+public Tarea updateTarea(){
+    // implementación del método
+    return tarea;
+}
+```
+
+#### @PatchMapping
+
+Generalmente, la anotación `@PatchMapping` se utiliza para manejar peticiones HTTP que tienen como objetivo actualizar uno o máS recurso de manera parcial.
+
+```java
+@RequestMapping(value="/tareas", method=RequestMethod.PATCH)
+public Tarea partialUpdateTareas(){
+    // implementación del método
+    return tarea;
+}
+```
+
+Su atajo es:
+
+```java
+@PatchMapping("/tareas}")
+public Tarea partialUpdateTareas(){
+    // implementación del método
+    return tarea;
+}
+```
+
+#### @DeleteMapping
+
+Generalmente, la anotación `@DeleteMapping` se utiliza para manejar peticiones HTTP que tienen como objetivo eliminar físicamente o lógicamente uno o más recurso
+
+```java
+@RequestMapping(value="/tareas", method=RequestMethod.DELETE)
+public void deleteTareas(){
+    // implementación del método
+    return;
+}
+```
+
+Su atajo es:
+
+```java
+@DeleteMapping("/tareas}")
+public void deleteTarea(){
+    // implementación del método
+    return;
+}
+```
 ### La anotación @RequestParam
 ### La anotación @ModelAttribute
+
+```java
+public class BaseController {
+
+    @ModelAttribute("usuario")
+    public Usuario getUsuario() {
+        Usuario usuario = new Usuario();
+        usuario.setUsername("lacandon");
+        usuario.setPrimerApellido("Lacandon Primer apellido");
+        usuario.setSegundoApellido("Lacandon segundo apellido");
+        return usuario;
+    }
+}
+
+```
 ### La anotación @PathVariable
+
+En ocasiones, vamos a requerir pasar parámetros a un servicio web. Una de las maneras de hacerlo es a través de la URL.
+
+Por ejemplo, si tenemos un servicio que nos permite consultar un recurso especificando el ID del mismo, lo podemos acceder de la siguiente manera:
+
+```shell
+GET /api/tarea/42
+```
+
+En el caso anterior, estamos solicitando el recurso tarea con ID = `42` a través del método `GET` del protocolo HTTP.
+
+Para poder construir un controlador que atienda este tipo de solicitudes, spring cuenta con la anotación `@PathVariable`.
+
+Ejemplo:
+
+```java
+@RestController
+@RequestMapping("/api")
+public class TareaRestController {
+
+    @Autowired
+    private TareaService service;
+
+    @RequestMapping("/tareas/{id}")
+    public Tarea getTareas(@PathVariable id) {
+        return service.consultaTareaPorId(id);
+    }       
+}
+```
+
+
 ### La anotación @Value
+
+La anotación `@Value` puede ser utiliza para inyectar en una variable dentro de una clase. Los valores que se pueden inyectar son los definidos en el archivo application.yml
+
+Ejemplo:
+
+```java
+@RestController
+@RequestMapping("/api")
+public class InfoController {
+
+    @Value("${spring.application.name}")
+    private String appName;
+
+    @Value("${server.port}")
+    private String port;
+
+    @Value("${app.description}")
+    private String description;
+
+    @Value("${app.version}")
+    private String version;
+}
+
+```
+
 ### La anotación @Autowired
+
+La anotación `@Autowired` nos permite inyectar dependencias que son administradas por el Framework de spring, entre las cuales destacan los Servicios y los Repositorios.
+
+
+
+Ejemplo:
+
+
+```java
+@RestController
+@RequestMapping("/api")
+public class TareaRestController {
+
+    @Autowired
+    private TareaService service;
+
+    @RequestMapping("/tareas")
+    public List<Tarea> getTareas(TareaFiltro filtro) {
+        return service.consultaTareas(filtro);
+    }
+}
+
+```
 ### La anotación @Qualifier
+Cuando existe una o más implementaciones de una interfaz y dichas implementaciones han sido anotadas con `@Service`, Spring no sabe que dependencia inyectar a menos que se le diga de manera explicita a través de la anotación `@Qualifier`.
+
+
 ### La anotación @Primary
+
+Adicionalmente a la anotación `@Qualifier`, existe otra manera de resolver el servicio que se debe de inyectar cuando existen varios disponibles y es a través de la anotación `@Primary`. Con esta anotación, se le dice a spring que inyecte por default el servicio anotado con `@Primary`.
+
+Ejemplo:
+
+
+```java
+@Service
+@Primary
+public class TareaDbService implements TareaService {
+
+}
+
+```
 ### La anotación @Configuration`
-### La anotaciones @Repository, @Service, @Controller
-### La anotaciones @Scanneo de componentes
-### La anotaciones Recursos estáticos
+
+La anotación `@Configuration` es parte del marco Spring Core. La anotación indica que la clase tiene métodos de definición de `@Bean` y que deberán de incluirse en el contexto global del aplicativo. De este modo, el contenedor Spring puede procesar la clase y generar Clases manejadas para usar en la aplicación.
+
+Ejemplo:
+
+```java
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public Version version() {
+        return new Version(1, 0, 0);
+    }
+}
+```
+
+### La anotaciones @Controller, @Service y @Repository
+
+Un servicio web está conformado por un conjunto de capas. Una capa es un conjunto de componentes o módulos de software que se encargan de realizar una función específica dentro del sistema. Cada capa o nivel se comunica con las capas adyacentes a través de una interfaz bien definida, lo que permite la separación de responsabilidades y la modularidad del sistema. 
+
+En su minima expresión, un componente de software está compuesto por cinco capas: 
+
+1. Capa de Control o Controlador,
+2. Capa de Servicio o lógica de negocio, 
+3. Capa de Modelo, 
+4. Capa de Repositorio o Acceso a datos.
+
+![alt text](img/layers.png)
+
+**Controlador**
+
+Se encarga de manejar todas las peticiones REST que llegan al componente antes de pasarlas a la capa de servicio. Las clases definidas en esta capa implementan la lógica de un controlador y identificadas al agregarles la anotación `@Controller`
+
+Ejemplo de un `@Controller`
+
+```java
+@Controller
+public class TareaController {
+
+    @RequestMapping("/tareas")
+    public String showTareas(Model model) {
+        model.addAttribute("titulo", "Gestor de tareas desde variable");
+        model.addAttribute("subtitulo", "Lista de tareas desde variable");
+        return "tareas";
+    }
+}
+
+```
+
+**Servicio**
+
+Se encarga de implementar la lógica de negocio de un componente. Las clases definidas en esta capa se indentifican con la anotación `@Service`
+
+Ejemplo:
+
+```java
+@Service
+public class TareaDbService {
+
+    @Autowired
+    private TareaRepository repository;
+
+    public Tarea guardarTarea(Tarea tarea) {
+        return repository.save(tarea);
+    }
+    // otros métodos
+}
+
+```
+
+**Modelo**
+
+En esta capa sólo existen los elementos del modelo de dominio que implementa el componente. En esta capa sólo existen clases simples con propiedades y sus respectivos métodos Set y Get.
+
+Ejemplo de una clase de Modelo:
+
+
+```java
+
+public class Tarea {
+
+    private String id;
+    private String nombre;
+    private String descripcion;
+
+    // Métodos Set y Get para cada propiedad
+}
+
+```
+**Repositorio**
+
+Se encarga de guardar, recuperar y actualizar los elementos del modelo de dominio de un proyecto mediante un dispositivo de almacenamiento. Las clases definidas en esta capa se encargar de acceder a una repositorio de información y realizar las operaciones de creación, actualización, eliminación y consulta de elementos almacenados. Las clases son identificadas con la anotación`@Repository`.
+
+
+Ejemplo de un `@Repository`
+
+```java
+@Repository
+public interface TareaRepository extends MongoRepository<Tarea, String>{}
+```
+
+
+### La anotaciones @SpringBootApplication
+
+Los proyectos Spring Boot permiten tener aplicaciones que utilicen configuración automática, escaneo de componentes y que puedan definir configuraciones adicionales en su "clase de aplicación". Se puede usar una única anotación `@SpringBootApplication` para habilitar esas tres características, es decir:
+
+`@EnableAutoConfiguration`: habilitar el mecanismo de configuración automática de Spring Boot
+`@ComponentScan:` habilite el escaneo @Component en el paquete donde se encuentra la aplicación
+`@SpringBootConfiguration`: habilitar el registro de componentes adicionales en el contexto o la importación de clases de configuración adicionales.
+
+
+Ejemplo:
+
+```java
+@SpringBootApplication(scanBasePackages = {"mx.calmecac.todo", "mx.calmecac.otro"})
+public class TodoApplication {
+	public static void main(String[] args) {
+		SpringApplication.run(TodoApplication.class, args);
+	}
+}
+```
+
 ### La anotaciones RestControllerAdvicer
 
 ```java
