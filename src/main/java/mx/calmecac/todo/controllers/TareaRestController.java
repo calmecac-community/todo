@@ -32,12 +32,12 @@ public class TareaRestController {
     // -> /api/tareas?nombre=oxis&descripcion=ldlf
     @RequestMapping("/tareas")
     public List<Tarea> getTareas(TareaFiltro filtro) {
-
         List<Tarea> tareas = service.consultaTareas(filtro);
         tareas.add(defaultTarea);
         return tareas;
     }
 
+    // Tarea - ejercicio
     @RequestMapping("/tareas/filtro")
     public TareaFiltro getTareasFiltro(TareaFiltro filtro) {
         return filtro;
